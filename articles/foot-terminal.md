@@ -17,13 +17,13 @@ alacrittyから乗り換えてfootというターミナルをしばらく使っ�
 
 @[card](https://codeberg.org/dnkl/foot)
 
-GPUを使わないにも関わらず超高速のC言語製ターミナルエミュレーターです。
+GPUを使わないにも関わらず高速なC言語製ターミナルエミュレーターです。
 
 # footが速い理由
 
 [wiki](https://codeberg.org/dnkl/foot/wiki/Performance)によると速さの主な理由は2つです。
 
-## 速い理由1:VT parserが非常に高速
+## 速い理由1:VT parserが高速
 
 VT parserはエスケープシーケンスのパーサーです。
 公式ドキュメントにfootとその他ターミナルエミュレータ(alacritty,urxvt,xterm)のvtebench結果を比較する[表](https://codeberg.org/dnkl/foot/src/branch/master/doc/benchmark.md)が掲載されています。footの各項目のスコアはalacrittyを大幅に上回るか同程度となっており、大きく劣る項目はありません。
@@ -32,7 +32,7 @@ vtebenchはPTYの読み取り速度を測るベンチマークなので、パー
 
 ## 速い理由2:差分レンダリング
 
-footのレンダリングエンジンは画面内で変化があった領域のみ再描画する差分レンダリングを行います。 1文字、1行だけの変更やスクロール^[スクロールは画面全体が動くので素朴には全体の更新となってしまいますが、footは既存の表示を移動させて追加の行だけレンダリングすることができます。]などにおいて効果は絶大で、alacrittyよりも圧倒的に速く描画してくれます。
+footのレンダリングエンジンは画面内で変化があった領域のみ再描画する差分レンダリングを行います。 1文字、1行だけの変更やスクロール^[スクロールは画面全体が動くので素朴には全体の更新となってしまいますが、footは既存の表示を移動させて追加の行だけレンダリングすることができます。]などにおいて効果は絶大で、alacrittyよりも速く描画してくれます。
 画面全体に更新が発生した場合はalacrittyに劣りますが、全体の再描画はそこまで多くないので、実用上alacrittyより高速です。(alacrittyの画面描画は小さな変更でも画面全体を再描画します。)
 
 そもそも、画面全体を書き換えるようなイベントはそのイベント自体がそこそこ時間がかかってターミナルの描画時間は誤差になるような気がします。
@@ -94,7 +94,7 @@ alacritty: 1.583 s ± 0.046 s
 
 両者大幅に速度が低下します。
 footの方がalacrittyより僅差ですが遅くなりました。何度かやっても同じだったので偶然ではないようです。
-foot自前のスクロールではなくtmux側がスクロールを行なっていることが差分レンダリングスクロールの性能を下げているようです。render-timerを表示して実行してみたところ画面全体の再描画よりは高速に描画できてるっぽかったので無効になっているわけではなさそう。
+foot自前のスクロールではなくtmux側がスクロールを行なっていることが差分レンダリングスクロールの性能を下げているようです。^[ステータスバーのせいかなと思ってtmux set status offをしても遅かったのでtmux自体が悪い]render-timerを表示して実行してみたところ画面全体の再描画よりは高速に描画できてるっぽかったので無効になっているわけではなさそう。
 
 ### zellij上で
 
@@ -134,20 +134,25 @@ alacritty: 1329.285 µs
 
 footはスクロールする行数が増えるほど不利なのでスクロール行数を増やしていったときの変化を確認します。
 
-2行
-![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-2C^e.png?raw=true)
 
-3行
-![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-3C^e.png?raw=true)
+|スクロール行数|render-timer時間(µs)|
+|-:|-:|
+|1|700くらい|
+|2|1200くらい|
+|3|1300くらい|
+|4|1400くらい|
+|5|1600くらい|
+|6|1800くらい|
+|10|2500くらい|
+|15|3700くらい|
+|20|5000くらい|
+|25|5500くらい|
+|26|5500くらい|
+|27|2500くらい|
+|30|2500くらい|
+|35|2500くらい|
 
-4行
-![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-4C^e.png?raw=true)
-
-5行
-![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-5C^e.png?raw=true)
-
-6行
-![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-6C^e.png?raw=true)
+27行スクロールから差分スクロールを諦めて全体再描画に切り替わった。
 
 ### 1行消してみる
 
@@ -156,6 +161,20 @@ dd で一行消しました。
 
 foot: 1946.93 µs
 alacritty: 1469.813 µs
+
+なんか遅い。実質、行を繰り上げてるだけだし差分スクロールが効いてくれそうな気がするんだけど……
+もしや number 列があるから？
+
+### set nonumberして1行消してみる
+
+set nonu して dd で1行消してみました。
+
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-nonu-dd.png?raw=true)
+
+foot: 985.47 µs
+
+それっぽい速さになった。どうやら左右に領域を分割するような要素があると差分スクロールは働かないらしい。
+試しに左にディレクトリツリーを出してスクロールしたら遅かった。
 
 ### 画面全体の変化
 
