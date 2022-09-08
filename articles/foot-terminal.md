@@ -78,15 +78,33 @@ hyperfine -r 10 --show-output -N "cat result"
 
 ### とりあえずそのままで
 
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/cat-raw.png?raw=true)
 
+foot: 284.4 ms ± 16.2 ms
+alacritty: 567.8 ms ± 33.5 ms
+
+footが2倍ほど速いです。画面を流れていくような表示には滅法強いのが見て取れます。
 
 ### tmux上で
 
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/cat-tmux.png?raw=true)
 
+foot: 1.608 s ± 0.015 s
+alacritty: 1.583 s ± 0.046 s
+
+両者大幅に速度が低下します。
+footの方がalacrittyより僅差ですが遅くなりました。何度かやっても同じだったので偶然ではないようです。
+foot自前のスクロールではなくtmux側がスクロールを行なっていることが差分レンダリングスクロールの性能を下げているようです。render-timerを表示して実行してみたところ画面全体の再描画よりは高速に描画できてるっぽかったので無効になっているわけではなさそう。
 
 ### zellij上で
 
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/cat-zellij.png?raw=true)
 
+foot: 1.198 s ± 0.019 s
+alacritty: 1.121 s ± 0.015 s
+
+tmuxのときと同じ傾向ですが、tmuxほど性能が落ちていません。zellijの方が速いらしい。
+~~でもzellijあんまり好きじゃない。~~
 
 ## vimしてるときの性能
 
@@ -96,15 +114,48 @@ vimと言いつつneovimを使ったのですがまあ見るのはrender-timer�
 ### 1文字打つ
 
 空のバッファーに"a"と1文字打ちました。
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-ia.png?raw=true)
+
+foot: 260.91 µs
+alacritty: 1338.148 µs
+
+footがalacrittyより5倍も速くなっています。
+やはり差分レンダリングは変化量が小さいときの効果が絶大です。
 
 ### 1行スクロールする
 
 先の実験で作った/usr以下の一覧を使いました。
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-1C^e.png?raw=true)
+
+foot: 734.15 µs
+alacritty: 1329.285 µs
+
+### 2行以上スクロールする
+
+footはスクロールする行数が増えるほど不利なのでスクロール行数を増やしていったときの変化を確認します。
+
+2行
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-2C^e.png?raw=true)
+
+3行
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-3C^e.png?raw=true)
+
+4行
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-4C^e.png?raw=true)
 
 ### 1行消してみる
 
 dd で一行消しました。
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-dd.png?raw=true)
+
+foot: 1946.93 µs
+alacritty: 1469.813 µs
 
 ### 画面全体の変化
 
 G で一番下に行きました。
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-G.png?raw=true)
+
+foot: 2505.03 µs
+alacritty: 1168.534 µs
+
