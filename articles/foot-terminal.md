@@ -85,7 +85,7 @@ hyperfine -r 10 --show-output -N "cat result"
 
 をそれぞれ実行しました。
 
-### とりあえずそのままで
+### ターミナルマルチプレクサなし
 
 ![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/cat-raw.png?raw=true)
 
@@ -112,7 +112,7 @@ foot自前のスクロールではなくtmux側がスクロールを行なって
 foot: 1.198 s ± 0.019 s
 alacritty: 1.121 s ± 0.015 s
 
-tmuxのときと同じ傾向ですが、tmuxほど性能が落ちていません。zellijの方が速いらしい。
+tmuxのときと同じ傾向ですが、tmuxほど性能が落ちていません。zellijの方が速いみたい？
 ~~でもzellijあんまり好きじゃない。~~
 
 ## vtebench
