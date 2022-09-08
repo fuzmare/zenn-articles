@@ -143,6 +143,12 @@ footはスクロールする行数が増えるほど不利なのでスクロー�
 4行
 ![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-4C^e.png?raw=true)
 
+5行
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-5C^e.png?raw=true)
+
+6行
+![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/vim-6C^e.png?raw=true)
+
 ### 1行消してみる
 
 dd で一行消しました。
