@@ -94,7 +94,7 @@ alacritty: 567.8 ms ± 33.5 ms
 
 footが2倍ほど速いです。画面を流れていくような表示には滅法強いのが見て取れます。
 
-### tmux上で
+### tmux使用
 
 ![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/cat-tmux.png?raw=true)
 
@@ -105,7 +105,7 @@ alacritty: 1.583 s ± 0.046 s
 footの方がalacrittyより僅差ですが遅くなりました。何度かやっても同じだったので偶然ではないようです。
 foot自前のスクロールではなくtmux側がスクロールを行なっていることが差分レンダリングスクロールの性能を下げているようです。^[ステータスバーのせいかなと思ってtmux set status offをしても遅かったのでtmux自体が悪い]render-timerを表示して実行してみたところ画面全体の再描画よりは高速に描画できてるっぽかったので無効になっているわけではなさそう。
 
-### zellij上で
+### zellij使用
 
 ![](https://github.com/fuzmare/zenn-articles/blob/main/articles/foot-terminal/cat-zellij.png?raw=true)
 
