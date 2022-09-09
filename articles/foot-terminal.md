@@ -1,5 +1,5 @@
 ---
-title: "速いターミナルfoot"
+title: "速いターミナルfoot(について書こうとしたらtmuxが遅くて大差ないという記事)"
 emoji: "🦶🏻"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: [terminal]
@@ -18,7 +18,9 @@ alacrittyから乗り換えてfootというターミナルをしばらく使っ�
 @[card](https://codeberg.org/dnkl/foot)
 
 GPUを使わないにも関わらず高速なC言語製ターミナルエミュレーターです。
-全体的に速いですが、状況次第でalacrittyの倍以上速いケースもあれば、alacrittyの半分以下に落ち込むケースもあります。
+インタラクティブな動作での性能を重視して設計されています。
+
+全体的に速いですが、alacrittyの倍以上速い部分、ケースもあれば、逆もあります。
 
 # footが速い理由
 
@@ -119,18 +121,21 @@ tmuxのときと同じ傾向ですが、tmuxほど性能が落ちていません
 
 vtebenchスコアを確認しました。
 
-|Benchmark|foot|alacritty|
-|:-|-:|-:|
-cursor_motion|15.52ms|31.58ms|
-dense_cells|46.32ms|113.93ms|
-light_cells|8.04ms|22.31ms|
-scrolling|167.66ms|114.03ms|
-scrolling_bottom_region|128.22ms|121.91ms|
-scrolling_bottom_small_region|130.88ms|118.85ms|
-scrolling_fullscreen|9.68ms|19.18ms|
-scrolling_top_region|136.57ms|130.92ms|
-scrolling_top_small_region|136.15ms|119.94ms|
-unicode|18.57ms|26.79ms|
+|Benchmark|foot|alacritty|foot+tmux|alacritty+tmux|
+|:-|-:|-:|-:|-:|
+cursor_motion|15.52ms|31.58ms|278.36ms|257.67ms|
+dense_cells|46.32ms|113.93ms|717.64ms|700.4ms|
+light_cells|8.04ms|22.31ms|22.32ms|21.6ms|
+scrolling|167.66ms|114.03ms|416.33ms|378.65ms|
+scrolling_bottom_region|128.22ms|121.91ms|427.5ms|405.36ms|
+scrolling_bottom_small_region|130.88ms|118.85ms|325.97ms|326.45ms|
+scrolling_fullscreen|9.68ms|19.18ms|37.66ms|35.25ms|
+scrolling_top_region|136.57ms|130.92ms|321ms|338.73ms|
+scrolling_top_small_region|136.15ms|119.94ms|332.97ms|339.47ms|
+unicode|18.57ms|26.79ms|191.55ms|259.82ms|
+
+tmuxは使うなということだろうか
+
 
 ## 描画性能のチェック with vim
 
@@ -219,13 +224,11 @@ foot: 985.47 µs
 foot: 2562.01 µs
 
 予想通り、全体再描画な時のレンダリング時間になっていました。
-まあスクロール領域をうまく検出するのはそれはそれで時間がかかりそうなので単純なアルゴリズムで検出できなければ諦めて全体再描画というのは現実的な挙動なような気がします。
+微妙な気分ですがスクロール領域をうまく検出するのはそれはそれで時間がかかりそうなので仕方ないような気もします。
 
 # まとめのようなもの
 
 footは差分レンダリングにより表示内容の変化が小さいときはalacritty以上に速いターミナルエミュレーターです。
 
 個人的にはサーバー/クライアントモードを持った現代的なターミナルというのが手放せないポイントとなっており、差分スクロールがちょっと微妙でたまにalacrittyより遅かろうとalacrittyに戻ろうという気持ちにはなりません。
-そもそも、ターミナルを速くしてもtmuxが結構遅いみたいなのでfoot+tmuxでもalacritty+tmuxでも大差ないんじゃないかと今は思っています。(本末転倒)
-
-だったら描画速度以外の速度……起動速度で選ぶべきではないでしょうか？
+そもそも、ターミナルを速くしてもtmuxが結構遅いみたいなのでtmuxを使う場合はfoot+tmuxでもalacritty+tmuxでも大差ないんじゃないかと今は思っています。(本末転倒)
