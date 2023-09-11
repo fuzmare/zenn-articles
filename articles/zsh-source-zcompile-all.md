@@ -3,7 +3,7 @@ title: "souceコマンドをオーバーライドして全てをzcompileする"
 emoji: "🚀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: [zsh]
-published: false
+published: true
 ---
 ## ダイレクトマーケティング
 この記事は同時公開の記事
@@ -11,6 +11,7 @@ published: false
 https://zenn.dev/fuzmare/articles/zsh-plugin-manager-cache
 
 の一部として作成しようとしていたものですが、独立したトピックとして成立しているので記事を分割したものです。
+本記事で紹介したテクニックともう一つのテクニックを組み合わせることでzshの起動時間を大幅に高速化できます。是非こちらも読んでください。
 
 ## 概要
 - sourceコマンドをオーバーライドしてsourceする時になんでもかんでもzcompileしてしまおう
@@ -54,7 +55,7 @@ ensure_zcompiled ~/.zshrc
 
 処理時間の増加は誤差に埋もれる程度で、測定しても増えているのかよく分からない程度でした。
 これでsourceされるあれこれを自動的にzcompileすることができるようになりました。
-あと、.zshrcはsourceで読まれるわけではないのでわざわざ別で書いています。
+.zshrcはオーバーライドしたsourceで読み込まれる前に読まれているので、わざわざ `ensure_zcompiled` に投げています。
 
 zshが起動した後はこのsource乗っ取りをやめたいという場合は.zshrc末尾に
 
@@ -73,3 +74,4 @@ zcompileを使用することによりzshの起動を高速化することがで
 ## こちらも読んで
 
 https://zenn.dev/fuzmare/articles/zsh-plugin-manager-cache
+
