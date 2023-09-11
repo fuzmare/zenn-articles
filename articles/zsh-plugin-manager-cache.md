@@ -1,8 +1,8 @@
 ---
-title: "究極のzshプラグイン読み込み高速化: プラグインマネージャーの限界を越えろ"
+title: "究極のzshプラグイン読み込み高速化: プラグインマネージャーの限界を越えろ【起動時間14ms】"
 emoji: "🚀"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: [zsh]
+topics: ["zsh", "shell", "sheldon"]
 published: true
 ---
 
