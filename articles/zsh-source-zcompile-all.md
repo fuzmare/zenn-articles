@@ -55,7 +55,7 @@ ensure_zcompiled ~/.zshrc
 
 処理時間の増加は誤差に埋もれる程度で、測定しても増えているのかよく分からない程度でした。
 これでsourceされるあれこれを自動的にzcompileすることができるようになりました。
-.zshrcはオーバーライドしたsourceで読み込まれる前に読まれているので、わざわざ `ensure_zcompiled` に投げています。
+.zshrcはオーバーライドしたsourceで読み込まれる前に読まれているので、わざわざ `ensure_zcompiled` に投げています。.zshenvとかがある人はそれらも同様です。
 
 zshが起動した後はこのsource乗っ取りをやめたいという場合は.zshrc末尾に
 

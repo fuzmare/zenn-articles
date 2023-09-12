@@ -113,7 +113,7 @@ zsh-deferで遅延できないコマンドは一部ありますが、多くは�
 また、sheldon君はデフォルトでは ~/.config/sheldon を使おうとするのですが、これだとzshの設定としては分散された配置になるので良くないです。環境変数SHELDON_CONFIG_DIRで場所を直せるので、 ~/.config/zsh/sheldon/ 下に入ってもらうことにしました。
 
 ## 合体
-本記事を執筆した時点での .zshrc は次の通りです。おおよそ以上の内容を合わせたものになっています。
+本記事を執筆した時点での私の .zshrc は次のようになっています。少し手が入っていますが、おおよそ以上の内容を合わせたものになっています。
 
 ```sh:.zshrc
 ZSHRC_DIR=${${(%):-%N}:A:h}
@@ -145,6 +145,8 @@ source $ZSHRC_DIR/nonlazy.zsh
 zsh-defer source $ZSHRC_DIR/lazy.zsh
 zsh-defer unfunction source
 ```
+
+手が入っているポイントは ensure_zcompiled でのメッセージ表示の "compiling" を色付きで表示するようにしたことと、sheldon source のキャッシュを $SHELDON_CONFIG_DIR に置くことにしている点です。
 
 ファイルの配置は次のようになっています。
 
